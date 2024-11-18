@@ -1,0 +1,62 @@
+function setup() {
+  createCanvas(600, 600, WEBGL);
+  noStroke();
+}
+
+function draw() {
+  background(20, 20, 50); // Latar belakang gelap
+
+  // Rotasi untuk animasi
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+
+  // Parameter hexagon
+  let radius = 100;
+  let depth = 50;
+
+  // Gradasi warna
+  let colors = [
+    color(255, 183, 3),  // Emas
+    color(3, 169, 244),  // Biru cerah
+    color(76, 175, 80)   // Hijau terang
+  ];
+
+  // Bagian atas hexagon
+  beginShape();
+  fill(lerpColor(colors[0], colors[1], 0.5)); // Gradasi antara emas dan biru
+  for (let i = 0; i < TWO_PI; i += PI / 3) {
+    let x = cos(i) * radius;
+    let y = sin(i) * radius;
+    vertex(x, y, -depth / 2);
+  }
+  endShape(CLOSE);
+
+  // Bagian bawah hexagon
+  beginShape();
+  fill(lerpColor(colors[1], colors[2], 0.5)); // Gradasi antara biru dan hijau
+  for (let i = 0; i < TWO_PI; i += PI / 3) {
+    let x = cos(i) * radius;
+    let y = sin(i) * radius;
+    vertex(x, y, depth / 2);
+  }
+  endShape(CLOSE);
+
+  // Sisi-sisi hexagon
+  for (let i = 0; i < TWO_PI; i += PI / 3) {
+    let x1 = cos(i) * radius;
+    let y1 = sin(i) * radius;
+    let x2 = cos(i + PI / 3) * radius;
+    let y2 = sin(i + PI / 3) * radius;
+
+    // Gradasi untuk sisi
+    let gradColor = lerpColor(colors[0], colors[2], i / TWO_PI);
+
+    beginShape();
+    fill(gradColor);
+    vertex(x1, y1, -depth / 2);
+    vertex(x2, y2, -depth / 2);
+    vertex(x2, y2, depth / 2);
+    vertex(x1, y1, depth / 2);
+    endShape(CLOSE);
+  }
+}
